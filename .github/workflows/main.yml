@@ -1,0 +1,76 @@
+name: Build QNX ARMv7 Toolchain
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Free disk space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: true
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Build Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            bison \
+            flex \
+            texinfo \
+            libgmp-dev \
+            libmpfr-dev \
+            libmpc-dev \
+            wget \
+            curl \
+            git \
+            python3 \
+            zlib1g-dev
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.4' # Matches your branch naming
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-unknown-linux-gnu # Adjust target if the rust build requires it
+
+      - name: Build Toolchain
+        run: |
+          if [ -f "/host-scripts/qnx-run.sh build" ]; then
+            ./host-scripts/qnx-run.sh build
+          else
+            echo "No build script found. Please update the workflow with the correct build command."
+            exit 1
+          fi
+
+      - name: Package Toolchain
+        run: |
+          mkdir -p output
+          # Replace 'bin' and 'lib' with the actual output folders of the build
+          tar -czf output/qnx65-armv7-toolchain.tar.gz bin/ lib/ include/ || true
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qnx65-armv7-toolchain
+          path: output/qnx65-armv7-toolchain.tar.gz
