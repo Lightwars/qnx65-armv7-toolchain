@@ -46,9 +46,8 @@ jobs:
       - name: Build Toolchain
         run: |
           echo "$(pwd)"
-          echo "$(ls -lah ./)"
-          if [ -f "./host-scripts/qnx-run.sh build" ]; then
-            ./host-scripts/qnx-run.sh build
+          if [ -f "host-scripts/qnx-run.sh build" ]; then
+            host-scripts/qnx-run.sh build
           else
             echo "No build script found. Please update the workflow with the correct build command."
             exit 1
