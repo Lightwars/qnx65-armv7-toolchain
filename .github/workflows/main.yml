@@ -45,9 +45,8 @@ jobs:
 
       - name: Build Toolchain
         run: |
-          echo "$(pwd)"
-          if [ -f "host-scripts/qnx-run.sh build" ]; then
-            host-scripts/qnx-run.sh build
+          if [ -f "/home/runner/work/qnx65-armv7-toolchain/qnx65-armv7-toolchain/host-scripts/qnx-run.sh build" ]; then
+            /home/runner/work/qnx65-armv7-toolchain/qnx65-armv7-toolchainhost-scripts/qnx-run.sh build
           else
             echo "No build script found. Please update the workflow with the correct build command."
             exit 1
