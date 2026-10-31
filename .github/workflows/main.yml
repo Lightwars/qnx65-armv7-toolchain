@@ -56,7 +56,9 @@ jobs:
 
       - name: Build Toolchain
         run: |
-          cd qnx65-armv7-toolchain
+          echo "$(pwd)"
+          echo "$(ls -lah ./)"
+          cd /home/runner/work/qnx65-armv7-toolchain/qnx65-armv7-toolchain
           if [ -f "/host-scripts/qnx-run.sh build" ]; then
             ./host-scripts/qnx-run.sh build
           else
