@@ -13,17 +13,6 @@ jobs:
     timeout-minutes: 360
 
     steps:
-      - name: Free disk space
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: true
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: true
-          swap-storage: true
-
       - name: Checkout Code
         uses: actions/checkout@v4
 
@@ -58,8 +47,7 @@ jobs:
         run: |
           echo "$(pwd)"
           echo "$(ls -lah ./)"
-          cd /home/runner/work/qnx65-armv7-toolchain/qnx65-armv7-toolchain
-          if [ -f "/host-scripts/qnx-run.sh build" ]; then
+          if [ -f "./host-scripts/qnx-run.sh build" ]; then
             ./host-scripts/qnx-run.sh build
           else
             echo "No build script found. Please update the workflow with the correct build command."
