@@ -56,6 +56,7 @@ jobs:
 
       - name: Build Toolchain
         run: |
+          cd qnx65-armv7-toolchain
           if [ -f "/host-scripts/qnx-run.sh build" ]; then
             ./host-scripts/qnx-run.sh build
           else
