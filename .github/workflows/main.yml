@@ -52,19 +52,25 @@ jobs:
           test -f host-scripts/qnx-run.sh
           if [ -f "host-scripts/qnx-run.sh" ]; then
             host-scripts/qnx-run.sh build
+            host-scripts/qnx-run.sh build 4.9
           else
             echo "No build script found. Please update the workflow with the correct build command."
             exit 1
           fi
 
-      - name: Package Toolchain
+      - name: Save built image
         run: |
-          mkdir -p output
-          # Replace 'bin' and 'lib' with the actual output folders of the build
-          tar -czf output/qnx65-armv7-toolchain.tar.gz bin/ lib/ include/ || true
+          docker image inspect qnx65-armv7-toolchain:8.5-full
+          docker save qnx65-armv7-toolchain:8.5-full | gzip -9 > qnx65-armv7-toolchain-8.5-full.tar.gz
+          docker image inspect qnx65-armv7-toolchain:4.9-full
+          docker save qnx65-armv7-toolchain:4.9-full | gzip -9 > qnx65-armv7-toolchain-4.9-full.tar.gz
 
-      - name: Upload Artifact
+      - name: Upload image
         uses: actions/upload-artifact@v4
         with:
-          name: qnx65-armv7-toolchain
-          path: output/qnx65-armv7-toolchain.tar.gz
+          name: qnx65-armv7-toolchain-images
+          path: |
+            qnx65-armv7-toolchain-8.5-full.tar.gz
+            qnx65-armv7-toolchain-4.9-full.tar.gz
+          retention-days: 90
+          compression-level: 0
