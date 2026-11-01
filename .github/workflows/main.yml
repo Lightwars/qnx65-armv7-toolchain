@@ -62,8 +62,8 @@ jobs:
         run: |
           docker image inspect qnx65-armv7-toolchain:8.5-full
           docker save qnx65-armv7-toolchain:8.5-full | gzip -9 > qnx65-armv7-toolchain-8.5-full.tar.gz
-          docker image inspect qnx65-armv7-toolchain:4.9-full
-          docker save qnx65-armv7-toolchain:4.9-full | gzip -9 > qnx65-armv7-toolchain-4.9-full.tar.gz
+          docker image inspect qnx65-armv7-toolchain:4.9
+          docker save qnx65-armv7-toolchain:4.9 | gzip -9 > qnx65-armv7-toolchain-4.9.tar.gz
 
       - name: Upload image
         uses: actions/upload-artifact@v4
@@ -71,6 +71,6 @@ jobs:
           name: qnx65-armv7-toolchain-images
           path: |
             qnx65-armv7-toolchain-8.5-full.tar.gz
-            qnx65-armv7-toolchain-4.9-full.tar.gz
+            qnx65-armv7-toolchain-4.9.tar.gz
           retention-days: 90
           compression-level: 0
